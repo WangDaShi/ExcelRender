@@ -1,6 +1,7 @@
 package com.loatr.excel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.loatr.excel.mapper.ExcelMapper;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.*;

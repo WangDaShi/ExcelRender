@@ -1,4 +1,4 @@
-package com.loatr.excel;
+package com.loatr.excel.mapper;
 
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -10,4 +10,5 @@ import java.util.Map;
 public interface ExcelMapper {
 
     void map(Sheet sheet, Map<String,Object> dataMap);
+
 }
