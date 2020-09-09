@@ -3,8 +3,10 @@ package com.loatr.excel;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.Arrays;
-import java.util.Map;
 
+/**
+ * json文件对应的bean对象
+ */
 public class JsonConfig {
 
     private Integer sheet;

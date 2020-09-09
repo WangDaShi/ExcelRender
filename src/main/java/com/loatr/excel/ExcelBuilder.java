@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * 主类
+ */
 public class ExcelBuilder {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
@@ -26,10 +29,22 @@ public class ExcelBuilder {
         }
     }
 
+    /**
+     * 从json配置信息中解析核心配置信息mapper
+     *
+     * @param config 配置信息
+     * @return mapper数组，顺序按json文件格式从上到下
+     */
     private static ExcelMapper[] parseMapper(JsonConfig config) {
         return new ExcelMapper[0];
     }
 
+    /**
+     * 将传入的数据与json中的配置信息一一匹配
+     * @param dataNames 数据名
+     * @param data bean数组
+     * @return bean名称与对象的映射
+     */
     private static Map<String, Object> extraData(String[] dataNames, Object[] data) {
         Objects.requireNonNull(data);
         Objects.requireNonNull(dataNames);
