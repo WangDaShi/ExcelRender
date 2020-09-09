@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test.com.loatr.excel.SimpleTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-09-09T09:01:07" hostname="DESKTOP-56PA7GB" time="0.885">
+  <properties/>
+  <testcase name="test" classname="test.com.loatr.excel.SimpleTest" time="0.885"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
