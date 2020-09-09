@@ -2,6 +2,8 @@ package com.loatr.excel;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -45,6 +47,14 @@ public class ExcelTools {
         return xlsx ? new XSSFWorkbook(in) : new HSSFWorkbook(new POIFSFileSystem(in));
     }
 
+    public static Cell getCell(Sheet sheet, int row, int col)
+    {
+        Row sheetRow = sheet.getRow(row);
+        if (sheetRow == null) sheetRow = sheet.createRow(row);
+        Cell cell = sheetRow.getCell(col);
+        if (cell == null) cell = sheetRow.createCell(col);
+        return cell;
+    }
 
     private static void closeQuietly(Closeable closeable)
     {

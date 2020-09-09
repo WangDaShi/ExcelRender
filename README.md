@@ -1,2 +1,2 @@
 # ExcelRender
-这是一个轻量化的利用json文件配置自动生成excel的工具
+这是一个轻量化的利用json配置文件自动生成excel的工具
