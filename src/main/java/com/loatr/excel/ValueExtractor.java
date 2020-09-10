@@ -16,21 +16,21 @@ import java.util.Map;
  */
 public class ValueExtractor {
 
-    public static Object extract(String expression,Map<String,Object> data){
+    public static Object extract(String expression,Map<String,Object> data) {
         String[] parts = expression.split("\\.");
         Object value = data.get(parts[0]);
-        for(int i = 1;i< parts.length;i++){
+        for (int i = 1; i < parts.length; i++) {
             String ex = parts[i];
-            if(ex.endsWith("()")){
-                value = getMethodValue(value,ex.substring(0,ex.length()-2));
-            }else{
-                value = getProperty(value,ex);
+            if (ex.endsWith("()")) {
+                value = getMethodValue(value, ex.substring(0, ex.length() - 2));
+            } else {
+                value = getProperty(value, ex);
             }
         }
         return value;
     }
 
-    private static Object getProperty(Object value, String ex) {
+    public static Object getProperty(Object value, String ex) {
         PropertyDescriptor descriptor = BeanUtils.getPropertyDescriptor(value.getClass(), ex);
         try {
             return descriptor.getReadMethod().invoke(value);

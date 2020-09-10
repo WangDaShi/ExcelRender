@@ -1,13 +1,12 @@
 package com.loatr.excel;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loatr.excel.mapper.ExcelMapper;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 主类
@@ -27,12 +26,12 @@ public class ExcelBuilder {
     public static void create(String path, File json, File template, Object ... data) throws IOException {
         JsonConfig config = parseJson(json);
         Map<String,Object> dataMap = extraData(config.getData(),data);
-        ExcelMapper[] mappers = parseMapper(config);
+        List<ExcelMapper> mappers = parseMapper(config);
         int sheetNum = config.getSheet();
         ExcelTools.genExcel(path,template,sheetNum,s->ExcelBuilder.render(s,mappers,dataMap));
     }
 
-    private static void render(Sheet sheet,ExcelMapper[] mappers,Map<String,Object> data){
+    private static void render(Sheet sheet,List<ExcelMapper> mappers,Map<String,Object> data){
         for(ExcelMapper mapper : mappers){
             mapper.map(sheet,data);
         }
@@ -44,8 +43,36 @@ public class ExcelBuilder {
      * @param config 配置信息
      * @return mapper数组，顺序按json文件格式从上到下
      */
-    private static ExcelMapper[] parseMapper(JsonConfig config) {
-        return new ExcelMapper[0];
+    private static List<ExcelMapper> parseMapper(JsonConfig config) {
+        JsonNode[] nodes = config.getMappers();
+        List<ExcelMapper> list = new ArrayList<>();
+        for(int i = 0;i<nodes.length;i++){
+            JsonNode node = nodes[i];
+            ExcelMapper mapper;
+            if(node.has("row")){
+                mapper = parseCellMapper(node);
+            }else if(node.has("nestMapper")){
+                mapper = parseNestMapper(node);
+            }else if(node.has("mapper")){
+                mapper = parseRowMapper(node);
+            }else{
+                throw new RuntimeException("格式错误，无法解析");
+            }
+            list.add(mapper);
+        }
+        return list;
+    }
+
+    private static ExcelMapper parseRowMapper(JsonNode node) {
+        return null;
+    }
+
+    private static ExcelMapper parseNestMapper(JsonNode node) {
+        return null;
+    }
+
+    private static ExcelMapper parseCellMapper(JsonNode node) {
+        return null;
     }
 
     /**
