@@ -1,0 +1,51 @@
+{
+    "sheet": 1,
+    "data": ["list","transaction","info"],
+    "mappers":[
+        {
+            "data": "userName",
+            "row": 1,
+            "column": 2 
+        },
+        {
+            "text": "transaction.name",
+            "row": 1,
+            "column": 2 
+        },
+        {
+            "data": "transaction",
+            "row": 1,
+            "column": 2,
+            "mapper": ["name","passId","transactionId"]
+        },
+        {
+            "data": "list",
+            "row": 1,
+            "column": 2,
+            "nestMapper": ["name","passId","transactionId"]
+        },
+        {
+            "row": 10,
+            "column": 10,
+            "data": "list.size()"
+        }
+    ],
+    "merge": [
+        {
+            "startRow": 1,
+            "endRow": 3,
+            "startCol": 2,
+            "endCol": 5
+        },
+        {
+            "startRow": 4,
+            "endRow": 6,
+            "column": 5
+        },
+        {
+            "startCol": 4,
+            "endCol": 6,
+            "row": 5
+        }
+    ]
+}

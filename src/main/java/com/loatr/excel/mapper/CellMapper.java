@@ -2,7 +2,7 @@ package com.loatr.excel.mapper;
 
 import com.loatr.excel.ExcelTools;
 import com.loatr.excel.ValueExtractor;
-import com.loatr.excel.format.DefaultFormatter;
+import com.loatr.excel.format.SimpleFormatter;
 import com.loatr.excel.format.ValueFormatter;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -16,15 +16,15 @@ public class CellMapper implements ExcelMapper {
 
     private int row;// 单元格id
     private int col;// 列id
-    private String value;// 解析表达式
+    private String express;// 解析表达式
     private String message;// 指定的值
-    private ValueFormatter formatter = new DefaultFormatter();// 默认格式化工具
+    private ValueFormatter formatter = new SimpleFormatter();// 默认格式化工具
 
     @Override
     public void map(Sheet sheet, Map<String, Object> dataMap) {
         Cell cell = ExcelTools.getCell(sheet, row, col);
         if(message == null || message.isBlank()){
-            Object value = ValueExtractor.extract(this.value, dataMap);
+            Object value = ValueExtractor.extract(express, dataMap);
             cell.setCellValue(formatter.format(value));
         }else{
             cell.setCellValue(message);
@@ -47,12 +47,12 @@ public class CellMapper implements ExcelMapper {
         this.col = col;
     }
 
-    public String getValue() {
-        return value;
+    public String getExpress() {
+        return express;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setExpress(String express) {
+        this.express = express;
     }
 
     public String getMessage() {

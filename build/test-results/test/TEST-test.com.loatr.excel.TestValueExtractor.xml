@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test.com.loatr.excel.TestValueExtractor" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-09-10T10:04:36" hostname="DESKTOP-56PA7GB" time="0.095">
+  <properties/>
+  <testcase name="testNest" classname="test.com.loatr.excel.TestValueExtractor" time="0.095"/>
+  <system-out><![CDATA[class java.lang.Integer
+7
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -17,4 +17,5 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi', version: '4.1.2'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '4.1.2'
     compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '4.1.2'
+    compile group: 'org.springframework', name: 'spring-beans', version: '5.2.8.RELEASE'
 }

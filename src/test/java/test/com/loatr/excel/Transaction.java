@@ -9,6 +9,7 @@ public class Transaction {
     private int num;
     private float fee;
     private LocalDateTime time;
+    private Transaction tran;
 
     public String getId() {
         return id;
@@ -48,5 +49,13 @@ public class Transaction {
 
     public void setTime(LocalDateTime time) {
         this.time = time;
+    }
+
+    public Transaction getTran() {
+        return tran;
+    }
+
+    public void setTran(Transaction tran) {
+        this.tran = tran;
     }
 }

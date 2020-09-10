@@ -16,6 +16,14 @@ public class ExcelBuilder {
 
     private static ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * 主方法入口
+     * @param path 要输出的文件路径
+     * @param json json配置文件
+     * @param template excel的模板文件
+     * @param data 需要填入excel的数据
+     * @throws IOException
+     */
     public static void create(String path, File json, File template, Object ... data) throws IOException {
         JsonConfig config = parseJson(json);
         Map<String,Object> dataMap = extraData(config.getData(),data);
@@ -31,7 +39,7 @@ public class ExcelBuilder {
     }
 
     /**
-     * 从json配置信息中解析核心配置信息mapper
+     * 从json配置信息中解析出mapper的配置信息
      *
      * @param config 配置信息
      * @return mapper数组，顺序按json文件格式从上到下

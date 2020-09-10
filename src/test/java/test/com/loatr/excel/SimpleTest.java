@@ -3,10 +3,14 @@ package test.com.loatr.excel;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loatr.excel.ExcelBuilder;
 import com.loatr.excel.JsonConfig;
+import org.junit.Assert;
 import org.junit.Test;
+import org.springframework.beans.BeanUtils;
 
+import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,4 +44,12 @@ public class SimpleTest {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void testSplit() {
+        String[] parts = "12.13.14.15.16().17".split("\\.");
+        Assert.assertArrayEquals("与预期不符",
+                new String[]{"12","13","14","15","16()","17"},parts);
+    }
+
 }
