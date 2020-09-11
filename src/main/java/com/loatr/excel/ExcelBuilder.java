@@ -3,6 +3,7 @@ package com.loatr.excel;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loatr.excel.mapper.ExcelMapper;
+import com.loatr.excel.mapper.MapperFactory;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.*;
@@ -13,7 +14,7 @@ import java.util.*;
  */
 public class ExcelBuilder {
 
-    private static ObjectMapper objectMapper = new ObjectMapper();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
     /**
      * 主方法入口
@@ -21,7 +22,7 @@ public class ExcelBuilder {
      * @param json json配置文件
      * @param template excel的模板文件
      * @param data 需要填入excel的数据
-     * @throws IOException
+     * @throws IOException 解析出错抛异常
      */
     public static void create(String path, File json, File template, Object ... data) throws IOException {
         JsonConfig config = parseJson(json);
@@ -31,6 +32,12 @@ public class ExcelBuilder {
         ExcelTools.genExcel(path,template,sheetNum,s->ExcelBuilder.render(s,mappers,dataMap));
     }
 
+    /**
+     * 把值填到excel里面
+     * @param sheet excel中的一个sheet页
+     * @param mappers 映射关系
+     * @param data 数据
+     */
     private static void render(Sheet sheet,List<ExcelMapper> mappers,Map<String,Object> data){
         for(ExcelMapper mapper : mappers){
             mapper.map(sheet,data);
@@ -47,32 +54,10 @@ public class ExcelBuilder {
         JsonNode[] nodes = config.getMappers();
         List<ExcelMapper> list = new ArrayList<>();
         for(int i = 0;i<nodes.length;i++){
-            JsonNode node = nodes[i];
-            ExcelMapper mapper;
-            if(node.has("row")){
-                mapper = parseCellMapper(node);
-            }else if(node.has("nestMapper")){
-                mapper = parseNestMapper(node);
-            }else if(node.has("mapper")){
-                mapper = parseRowMapper(node);
-            }else{
-                throw new RuntimeException("格式错误，无法解析");
-            }
+            ExcelMapper mapper = MapperFactory.create(nodes[i]);
             list.add(mapper);
         }
         return list;
-    }
-
-    private static ExcelMapper parseRowMapper(JsonNode node) {
-        return null;
-    }
-
-    private static ExcelMapper parseNestMapper(JsonNode node) {
-        return null;
-    }
-
-    private static ExcelMapper parseCellMapper(JsonNode node) {
-        return null;
     }
 
     /**
@@ -97,6 +82,11 @@ public class ExcelBuilder {
         return map;
     }
 
+    /**
+     * 把json文件解析成配置对象
+     * @param json json配置文件
+     * @return 配置对象
+     */
     private static JsonConfig parseJson(File json){
         try {
             return objectMapper.readValue(json,JsonConfig.class);

@@ -1,5 +1,6 @@
 package test.com.loatr.excel;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loatr.excel.ExcelBuilder;
 import com.loatr.excel.JsonConfig;
@@ -11,7 +12,10 @@ import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 public class SimpleTest {
@@ -36,10 +40,18 @@ public class SimpleTest {
 
     @Test
     public void testJson(){
-        File json = new File(prePath + "config.json");
+        File json = new File(prePath + "config-1.json");
+        JsonConfig jsonConfig;
         try {
-            JsonConfig jsonConfig = objectMapper.readValue(json, JsonConfig.class);
+            jsonConfig = objectMapper.readValue(json, JsonConfig.class);
             System.out.println(jsonConfig);
+            JsonNode[] mappers = jsonConfig.getMappers();
+            JsonNode node = mappers[0].get("mapper");
+            System.out.println(node.isArray());
+            System.out.println(node.size());
+            for(JsonNode n : node){
+                System.out.println(n.asText());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -52,4 +64,8 @@ public class SimpleTest {
                 new String[]{"12","13","14","15","16()","17"},parts);
     }
 
+    @Test
+    public void testNothing(){
+
+    }
 }

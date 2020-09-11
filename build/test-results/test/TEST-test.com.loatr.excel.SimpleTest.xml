@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="test.com.loatr.excel.SimpleTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-09-11T03:15:25" hostname="DESKTOP-56PA7GB" time="0.097">
+  <properties/>
+  <testcase name="testJson" classname="test.com.loatr.excel.SimpleTest" time="0.097"/>
+  <system-out><![CDATA[JsonConfig{sheet=1, data=[list, info], mappers=[{"data":"list","startRow":3,"startColumn":1,"mapper":["aaa","bbb","ccc"]}, {"data":"list","startRow":3,"startColumn":1,"nestmapper":["aaa","bbb","ccc"]}, {"blankRow":10}, {"data":"list","startRow":3,"startColumn":1,"mapper":{"1":"name","2":"passId","3":"transactionId","4":"insertTime"}}]}
+true
+3
+aaa
+bbb
+ccc
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
