@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Objects;
 
 public class SimpleFormatter implements ValueFormatter{
 
@@ -13,6 +14,9 @@ public class SimpleFormatter implements ValueFormatter{
 
     @Override
     public String format(Object value) {
+        if(Objects.isNull(value)){
+            return "";
+        }
         Class<?> colType = value.getClass();
         if (colType.getName().equals("int") || colType.equals(Integer.class)) {
             return value.toString();
@@ -25,20 +29,20 @@ public class SimpleFormatter implements ValueFormatter{
         } else if (colType.getName().equals("long") || colType.equals(Long.class)) {
             return value.toString();
         } else if (colType.getName().equals("float") || colType.equals(Float.class)) {
-            return null;
+            return value.toString();
         } else if (colType.getName().equals("double") || colType.equals(Double.class)) {
-            return null;
+            return value.toString();
         } else if (colType.getName().equals("char") || colType.equals(Character.class)
                 || colType.equals(String.class)) {
             return value.toString();
         } else if (java.util.Date.class.isAssignableFrom(colType)) {
             return ((Date)value).toString();
         } else if (java.sql.Time.class.isAssignableFrom(colType)) {
-            return null;
+            return value.toString();
         } else if (colType.equals(LocalDate.class)) {
             return value == null ? null : ((LocalDate) value).format(dateFormatter);
         } else if (colType.equals(LocalDateTime.class)) {
-            return value == null ? null : ((LocalDate) value).format(dateTimeFormatter);
+            return value == null ? null : ((LocalDateTime) value).format(dateTimeFormatter);
         } else if (BigDecimal.class.isAssignableFrom(colType)) {
             return value == null ? null : ((BigDecimal)value).toString();
         } else if (colType.isEnum()) {
@@ -48,5 +52,4 @@ public class SimpleFormatter implements ValueFormatter{
             return value.toString();
         }
     }
-
 }

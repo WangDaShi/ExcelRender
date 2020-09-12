@@ -1,6 +1,0 @@
-ÓJsonConfig{sheet=1, data=[list, info], mappers=[{"data":"list","startRow":3,"startColumn":1,"mapper":["aaa","bbb","ccc"]}, {"data":"list","startRow":3,"startColumn":1,"nestmapper":["aaa","bbb","ccc"]}, {"blankRow":10}, {"data":"list","startRow":3,"startColumn":1,"mapper":{"1":"name","2":"passId","3":"transactionId","4":"insertTime"}}]}
-true
-3
-aaa
-bbb
-ccc

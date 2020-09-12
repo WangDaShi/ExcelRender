@@ -8,6 +8,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.util.Map;
+import java.util.Set;
 
 public class ValueSetterVisitor implements MapperVisitor<Void>{
 
@@ -36,6 +37,7 @@ public class ValueSetterVisitor implements MapperVisitor<Void>{
         }else{
             cell.setCellValue(message);
         }
+        currRowId = mapper.getRow();
         return null;
     }
 
@@ -43,39 +45,40 @@ public class ValueSetterVisitor implements MapperVisitor<Void>{
     public Void forRow(RowMapper mapper) {
         setRowIdIfAbsent(mapper);
         Object value = ValueExtractor.extract(mapper.getExpress(), dataMap);
-        String[] exMap = mapper.getExMap();
+        Map<Integer, String> expressMap = mapper.getExpressMap();
         int row = mapper.getRow();
         int col = mapper.getCol();
+        fillValue(mapper, value, row, col);
+        currRowId = mapper.getRow();
+        return null;
+    }
+
+    private void fillValue(AbstractRowMapper mapper, Object value, int row, int col) {
         ValueFormatter formatter = mapper.getFormatter();
-        for(int i = 0;i<exMap.length;i++){
-            Object property = ValueExtractor.getProperty(value, exMap[i]);
-            Cell cell = ExcelTools.getCell(this.sheet, row, col + i);
+        Map<Integer, String> expressMap = mapper.getExpressMap();
+        for(Map.Entry<Integer, String> entry : expressMap.entrySet()){
+            Object property = ValueExtractor.getProperty(value, entry.getValue());
+            Cell cell = ExcelTools.getCell(this.sheet, row, col + entry.getKey());
             cell.setCellValue(formatter.format(property));
         }
-        return null;
     }
 
     @Override
     public Void forNest(NestMapper mapper) {
         setRowIdIfAbsent(mapper);
         Object value = ValueExtractor.extract(mapper.getExpress(), dataMap);
-        String[] exMap = mapper.getExMap();
-        int row = mapper.getRow();
-        int col = mapper.getCol();
-        ValueFormatter formatter = mapper.getFormatter();
-        if(!value.getClass().isAssignableFrom(Iterable.class)){
-            throw new RuntimeException("无法对一个非迭代对象取值");
-        }else{
+        if(value.getClass().isArray()){
+            return null;// TODO
+        }else if(Iterable.class.isAssignableFrom(value.getClass())){
             Iterable<?> iterable = (Iterable)value;
             int j = 0;
             for(Object v : iterable){
-                for(int i = 0;i<exMap.length;i++){
-                    Object property = ValueExtractor.getProperty(value, exMap[i]);
-                    Cell cell = ExcelTools.getCell(sheet, row + j, col+ i);
-                    cell.setCellValue(formatter.format(property));
-                }
+                fillValue(mapper,v,mapper.getRow() + j, mapper.getCol());
                 j++;
             }
+            currRowId =  mapper.getRow() + j -1;
+        }else {
+            throw new RuntimeException("无法对一个非迭代对象取值");
         }
         return null;
     }
@@ -87,7 +90,7 @@ public class ValueSetterVisitor implements MapperVisitor<Void>{
     }
 
     private void setRowIdIfAbsent(ExcelMapper mapper){
-        if(mapper.getRow() == -1){
+        if(mapper.getRow() < 0){
             mapper.setRow(currRowId + 1);
         }
     }

@@ -22,9 +22,9 @@ public class MapperFactory {
      */
     public static ExcelMapper create(JsonNode node){
         // dispatch
-        if(node.has(Keyword.ROW.value()) && node.has(Keyword.COLUMN.value())){
+        if(node.has(Keyword.COLUMN.value())){
             return parseCellMapper(node);
-        }else if(node.has(Keyword.START_ROW.value()) && node.has(Keyword.START_COLUMN.value())){
+        }else if(node.has(Keyword.START_COLUMN.value())){
             if(node.has(Keyword.NEST_MAPPER.value())){
                 return parseNestMapper(node);
             }else if(node.has(Keyword.MAPPER.value())){
@@ -39,10 +39,39 @@ public class MapperFactory {
         }
     }
 
+    private static ExcelMapper parseCellMapper(JsonNode node) {
+        CellMapper mapper = new CellMapper();
+        if(node.has(Keyword.ROW.value())){
+            mapper.setRow(JsonTools.readInt(node,Keyword.ROW));
+        }else{
+            mapper.setRow(-1);
+        }
+        mapper.setCol(JsonTools.readInt(node,Keyword.COLUMN));
+        // 如果message字段填了值就不去尝试解析data字段
+        if(node.has("message")){
+            mapper.setMessage(JsonTools.readString(node,Keyword.MESSAGE));
+        }else{
+            mapper.setExpress(JsonTools.readString(node,Keyword.DATA));
+        }
+        return mapper;
+    }
+
+    private static BlankMapper parseBlankMapper(JsonNode node){
+        BlankMapper mapper = new BlankMapper();
+        int len = JsonTools.readInt(node,Keyword.BLANK_ROW);
+        AssertTools.assertTrue(len >= 0,"blankRow不能小于0");
+        mapper.setBlankRowLength(len);
+        return mapper;
+    }
+
     private static RowMapper parseRowMapper(JsonNode node) {
         RowMapper mapper = new RowMapper();
-        mapper.setRow(JsonTools.readInt(node,Keyword.ROW));
-        mapper.setCol(JsonTools.readInt(node,Keyword.COLUMN));
+        if(node.has(Keyword.START_ROW.value())){
+            mapper.setRow(JsonTools.readInt(node,Keyword.START_ROW));
+        }else{
+            mapper.setRow(-1);
+        }
+        mapper.setCol(JsonTools.readInt(node,Keyword.START_COLUMN));
         mapper.setExpress(JsonTools.readString(node,Keyword.DATA));
         mapper.setExpressMap(getMap(node,Keyword.MAPPER));
         return mapper;
@@ -50,8 +79,12 @@ public class MapperFactory {
 
     private static ExcelMapper parseNestMapper(JsonNode node) {
         NestMapper mapper = new NestMapper();
-        mapper.setRow(JsonTools.readInt(node,Keyword.ROW));
-        mapper.setCol(JsonTools.readInt(node,Keyword.COLUMN));
+        if(node.has(Keyword.START_ROW.value())){
+            mapper.setRow(JsonTools.readInt(node,Keyword.START_ROW));
+        }else{
+            mapper.setRow(-1);
+        }
+        mapper.setCol(JsonTools.readInt(node,Keyword.START_COLUMN));
         mapper.setExpress(JsonTools.readString(node,Keyword.DATA));
         mapper.setExpressMap(getMap(node,Keyword.NEST_MAPPER));
         return mapper;
@@ -61,7 +94,7 @@ public class MapperFactory {
         JsonNode mapper = node.get(keyword.value());
         JsonTools.nonNull(mapper,"属性" + keyword.value() + "不存在");
         if(mapper.isArray()){
-            return extractFromArr(node);
+            return extractFromArr(mapper);
         }else{
             return extractFromMap(mapper);
         }
@@ -85,32 +118,13 @@ public class MapperFactory {
     }
 
     private static TreeMap<Integer, String> extractFromArr(JsonNode node) {
-        String[] beanNames = JsonTools.readStringArray(node, Keyword.MAPPER);
         TreeMap<Integer,String> map = new TreeMap<>();
-        for(int i = 0; i < beanNames.length;i++){
-            map.put(i,beanNames[i]);
+        int i = 0;
+        for(JsonNode n : node){
+            map.put(i,n.asText());
+            i++;
         }
         return map;
     }
 
-    private static ExcelMapper parseCellMapper(JsonNode node) {
-        CellMapper mapper = new CellMapper();
-        mapper.setRow(JsonTools.readInt(node,Keyword.ROW));
-        mapper.setCol(JsonTools.readInt(node,Keyword.COLUMN));
-        // 如果message字段填了值就不去尝试解析data字段
-        if(node.has("message")){
-            mapper.setMessage(JsonTools.readString(node,Keyword.MESSAGE));
-        }else{
-            mapper.setExpress(JsonTools.readString(node,Keyword.DATA));
-        }
-        return mapper;
-    }
-
-    private static BlankMapper parseBlankMapper(JsonNode node){
-        BlankMapper mapper = new BlankMapper();
-        int len = JsonTools.readInt(node,Keyword.BLANK_ROW);
-        AssertTools.assertTrue(len >= 0,"blankRow不能小于0");
-        mapper.setBlankRowLength(len);
-        return mapper;
-    }
 }

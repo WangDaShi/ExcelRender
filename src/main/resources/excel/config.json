@@ -3,7 +3,7 @@
     "data": ["list","info"],
     "mappers":[
         {
-            "data": "userName",
+            "data": "info.userName",
             "row": 1,
             "column": 2 
         },

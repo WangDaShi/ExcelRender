@@ -1,12 +1,15 @@
 package test.com.loatr.excel;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /**
  * 测试使用bean
  */
 public class ExcelInfo {
 
     private String message;
-    private String date;
+    private LocalDateTime date;
 
     public String getMessage() {
         return message;
@@ -16,11 +19,11 @@ public class ExcelInfo {
         this.message = message;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 }
