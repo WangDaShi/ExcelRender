@@ -1,11 +1,9 @@
 package com.loatr.excel.visitor;
 
+import com.loatr.excel.mapper.*;
 import com.loatr.excel.tools.ExcelTools;
 import com.loatr.excel.ValueExtractor;
 import com.loatr.excel.format.ValueFormatter;
-import com.loatr.excel.mapper.CellMapper;
-import com.loatr.excel.mapper.NestMapper;
-import com.loatr.excel.mapper.RowMapper;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -15,6 +13,7 @@ public class ValueSetterVisitor implements MapperVisitor<Void>{
 
     private Sheet sheet;
     private Map<String,Object> dataMap;
+    private int currRowId = 0;
 
     private ValueSetterVisitor(){};
 
@@ -28,6 +27,7 @@ public class ValueSetterVisitor implements MapperVisitor<Void>{
 
     @Override
     public Void forCell(CellMapper mapper) {
+        setRowIdIfAbsent(mapper);
         Cell cell = ExcelTools.getCell(this.getSheet(),mapper.getRow(),mapper.getCol());
         String message = mapper.getMessage();
         if(message == null || message.isBlank()){
@@ -41,6 +41,7 @@ public class ValueSetterVisitor implements MapperVisitor<Void>{
 
     @Override
     public Void forRow(RowMapper mapper) {
+        setRowIdIfAbsent(mapper);
         Object value = ValueExtractor.extract(mapper.getExpress(), dataMap);
         String[] exMap = mapper.getExMap();
         int row = mapper.getRow();
@@ -56,6 +57,7 @@ public class ValueSetterVisitor implements MapperVisitor<Void>{
 
     @Override
     public Void forNest(NestMapper mapper) {
+        setRowIdIfAbsent(mapper);
         Object value = ValueExtractor.extract(mapper.getExpress(), dataMap);
         String[] exMap = mapper.getExMap();
         int row = mapper.getRow();
@@ -76,6 +78,18 @@ public class ValueSetterVisitor implements MapperVisitor<Void>{
             }
         }
         return null;
+    }
+
+    @Override
+    public Void fotBlank(BlankMapper mapper) {
+        currRowId = currRowId + mapper.getBlankRowLength();
+        return null;
+    }
+
+    private void setRowIdIfAbsent(ExcelMapper mapper){
+        if(mapper.getRow() == -1){
+            mapper.setRow(currRowId + 1);
+        }
     }
 
     public Sheet getSheet() {

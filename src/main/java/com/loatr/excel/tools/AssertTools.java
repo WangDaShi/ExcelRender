@@ -5,8 +5,14 @@ import java.util.Objects;
 
 public final class AssertTools {
 
-    public static void assertTrue(){
+    public static void assertFalse(boolean r,String message){
+        assertTrue(!r,message);
+    }
 
+    public static void assertTrue(boolean r,String message){
+        if(!r){
+            throw new IllegalArgumentException(message);
+        }
     }
 
     public static void assertExist(File file,String message){

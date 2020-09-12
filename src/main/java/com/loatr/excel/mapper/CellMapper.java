@@ -9,23 +9,13 @@ import com.loatr.excel.visitor.MapperVisitor;
  */
 public class CellMapper extends ExcelMapper {
 
-    private int row;// 单元格id
     private int col;// 列id
     private String express;// 解析表达式
     private String message;// 指定的值
-    private ValueFormatter formatter = new SimpleFormatter();// 默认格式化工具
 
     @Override
     public <T> T accept(MapperVisitor<T> v) {
         return v.forCell(this);
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
     }
 
     public int getCol() {
@@ -52,11 +42,4 @@ public class CellMapper extends ExcelMapper {
         this.message = message;
     }
 
-    public ValueFormatter getFormatter() {
-        return formatter;
-    }
-
-    public void setFormatter(ValueFormatter formatter) {
-        this.formatter = formatter;
-    }
 }

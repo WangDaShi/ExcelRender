@@ -2,6 +2,9 @@ package test.com.loatr.excel;
 
 import java.time.LocalDateTime;
 
+/**
+ * 测试使用bean
+ */
 public class Transaction {
 
     private String id;

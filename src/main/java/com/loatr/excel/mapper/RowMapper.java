@@ -4,13 +4,13 @@ import com.loatr.excel.format.SimpleFormatter;
 import com.loatr.excel.format.ValueFormatter;
 import com.loatr.excel.visitor.MapperVisitor;
 
+import java.util.Map;
+
 public class RowMapper extends ExcelMapper{
 
-    private int row;
     private int col;
-    private String[] exMap;
+    private Map<Integer,String> expressMap;
     private String express;
-    private ValueFormatter formatter = new SimpleFormatter();
 
     public static RowMapper create(int row,int col,String express){
         return null;
@@ -21,15 +21,6 @@ public class RowMapper extends ExcelMapper{
         return v.forRow(this);
     }
 
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     public int getCol() {
         return col;
     }
@@ -38,12 +29,12 @@ public class RowMapper extends ExcelMapper{
         this.col = col;
     }
 
-    public String[] getExMap() {
-        return exMap;
+    public Map<Integer, String> getExpressMap() {
+        return expressMap;
     }
 
-    public void setExMap(String[] exMap) {
-        this.exMap = exMap;
+    public void setExpressMap(Map<Integer, String> expressMap) {
+        this.expressMap = expressMap;
     }
 
     public String getExpress() {
@@ -54,11 +45,4 @@ public class RowMapper extends ExcelMapper{
         this.express = express;
     }
 
-    public ValueFormatter getFormatter() {
-        return formatter;
-    }
-
-    public void setFormatter(ValueFormatter formatter) {
-        this.formatter = formatter;
-    }
 }

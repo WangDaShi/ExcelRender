@@ -7,8 +7,10 @@ public enum Keyword {
     MESSAGE("message"),
     DATA("data"),
     MAPPER("mapper"),
-    STARTROW("startRow"),
-    STARTCOLUMN("startColumn");
+    BLANK_ROW("blankRow"),
+    START_ROW("startRow"),
+    START_COLUMN("startColumn"),
+    NEST_MAPPER("nestmapper");
 
     private String value;
 
@@ -16,7 +18,7 @@ public enum Keyword {
         this.value = value;
     }
 
-    public String getValue(){
+    public String value(){
         return this.value;
     }
 }

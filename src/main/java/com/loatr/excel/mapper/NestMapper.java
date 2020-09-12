@@ -4,27 +4,17 @@ import com.loatr.excel.format.SimpleFormatter;
 import com.loatr.excel.format.ValueFormatter;
 import com.loatr.excel.visitor.MapperVisitor;
 
+import java.util.Map;
+
 public class NestMapper extends ExcelMapper{
 
-    private int row;
     private int col;
-    private String[] exMap;
     private String express;
-    private ValueFormatter formatter = new SimpleFormatter();
+    private Map<Integer,String> expressMap;
 
     @Override
     public <T> T accept(MapperVisitor<T> v) {
         return v.forNest(this);
-    }
-
-
-
-    public int getRow() {
-        return row;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
     }
 
     public int getCol() {
@@ -35,14 +25,6 @@ public class NestMapper extends ExcelMapper{
         this.col = col;
     }
 
-    public String[] getExMap() {
-        return exMap;
-    }
-
-    public void setExMap(String[] exMap) {
-        this.exMap = exMap;
-    }
-
     public String getExpress() {
         return express;
     }
@@ -51,11 +33,11 @@ public class NestMapper extends ExcelMapper{
         this.express = express;
     }
 
-    public ValueFormatter getFormatter() {
-        return formatter;
+    public Map<Integer, String> getExpressMap() {
+        return expressMap;
     }
 
-    public void setFormatter(ValueFormatter formatter) {
-        this.formatter = formatter;
+    public void setExpressMap(Map<Integer, String> expressMap) {
+        this.expressMap = expressMap;
     }
 }

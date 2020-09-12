@@ -1,5 +1,8 @@
 package test.com.loatr.excel;
 
+/**
+ * 测试使用bean
+ */
 public class ExcelInfo {
 
     private String message;

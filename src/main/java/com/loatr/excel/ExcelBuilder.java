@@ -34,7 +34,7 @@ public class ExcelBuilder {
         Map<String,Object> dataMap = extraData(config.getData(),data);
         List<ExcelMapper> mappers = parseMapper(config);
         int sheetNum = config.getSheet();
-        ExcelTools.genExcel(path,template,sheetNum, s->ExcelBuilder.render(s,mappers,dataMap));
+        ExcelTools.genExcel(path,template,sheetNum, s->ExcelBuilder.rend(s,mappers,dataMap));
     }
 
     /**
@@ -56,7 +56,7 @@ public class ExcelBuilder {
      * @param mappers 映射关系
      * @param data 数据
      */
-    private static void render(Sheet sheet,List<ExcelMapper> mappers,Map<String,Object> data){
+    private static void rend(Sheet sheet, List<ExcelMapper> mappers, Map<String,Object> data){
         MapperVisitor valueSetter= ValueSetterVisitor.create(sheet,data);
         for(ExcelMapper mapper : mappers){
             mapper.accept(valueSetter);

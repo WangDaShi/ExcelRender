@@ -1,9 +1,6 @@
 package com.loatr.excel.visitor;
 
-import com.loatr.excel.mapper.CellMapper;
-import com.loatr.excel.mapper.ExcelMapper;
-import com.loatr.excel.mapper.NestMapper;
-import com.loatr.excel.mapper.RowMapper;
+import com.loatr.excel.mapper.*;
 
 /**
  * ExcelMapper对应的versitor接口
@@ -16,4 +13,6 @@ public interface MapperVisitor<T> {
     T forRow(RowMapper mapper);
 
     T forNest(NestMapper mapper);
+
+    T fotBlank(BlankMapper mapper);
 }
