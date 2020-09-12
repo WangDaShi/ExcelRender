@@ -1,18 +1,13 @@
 package com.loatr.excel.mapper;
 
-import com.loatr.excel.ExcelTools;
-import com.loatr.excel.ValueExtractor;
 import com.loatr.excel.format.SimpleFormatter;
 import com.loatr.excel.format.ValueFormatter;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Sheet;
-
-import java.util.Map;
+import com.loatr.excel.visitor.MapperVisitor;
 
 /**
  * 处理单个单元格的赋值
  */
-public class CellMapper implements ExcelMapper {
+public class CellMapper extends ExcelMapper {
 
     private int row;// 单元格id
     private int col;// 列id
@@ -21,14 +16,8 @@ public class CellMapper implements ExcelMapper {
     private ValueFormatter formatter = new SimpleFormatter();// 默认格式化工具
 
     @Override
-    public void map(Sheet sheet, Map<String, Object> dataMap) {
-        Cell cell = ExcelTools.getCell(sheet, row, col);
-        if(message == null || message.isBlank()){
-            Object value = ValueExtractor.extract(express, dataMap);
-            cell.setCellValue(formatter.format(value));
-        }else{
-            cell.setCellValue(message);
-        }
+    public <T> T accept(MapperVisitor<T> v) {
+        return v.forCell(this);
     }
 
     public int getRow() {
@@ -61,5 +50,13 @@ public class CellMapper implements ExcelMapper {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public ValueFormatter getFormatter() {
+        return formatter;
+    }
+
+    public void setFormatter(ValueFormatter formatter) {
+        this.formatter = formatter;
     }
 }

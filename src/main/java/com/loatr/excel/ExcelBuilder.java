@@ -4,6 +4,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.loatr.excel.mapper.ExcelMapper;
 import com.loatr.excel.mapper.MapperFactory;
+import com.loatr.excel.tools.AssertTools;
+import com.loatr.excel.tools.ExcelTools;
+import com.loatr.excel.visitor.MapperVisitor;
+import com.loatr.excel.visitor.ValueSetterVisitor;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import java.io.*;
@@ -18,18 +22,32 @@ public class ExcelBuilder {
 
     /**
      * 主方法入口
-     * @param path 要输出的文件路径
+     * @param path 要输出的文件路径 + 文件名
      * @param json json配置文件
      * @param template excel的模板文件
      * @param data 需要填入excel的数据
      * @throws IOException 解析出错抛异常
      */
     public static void create(String path, File json, File template, Object ... data) throws IOException {
+        assertArgument(path,json,template,data);
         JsonConfig config = parseJson(json);
         Map<String,Object> dataMap = extraData(config.getData(),data);
         List<ExcelMapper> mappers = parseMapper(config);
         int sheetNum = config.getSheet();
-        ExcelTools.genExcel(path,template,sheetNum,s->ExcelBuilder.render(s,mappers,dataMap));
+        ExcelTools.genExcel(path,template,sheetNum, s->ExcelBuilder.render(s,mappers,dataMap));
+    }
+
+    /**
+     * 校验参数
+     */
+    private static void assertArgument(String path, File json, File template, Object[] data){
+        if(Objects.isNull(path) || path.isBlank()){
+            throw new NullPointerException("参数path不能为null");
+        }
+        AssertTools.assertExist(new File(path).getParentFile(),"目标文件所在目录不存在，path:" + path);
+        AssertTools.assertExist(json,"参数json不能为null");
+        AssertTools.assertExist(json,"参数template不能为null");
+        AssertTools.assertEachNonNull(data,"参数data不能为null");
     }
 
     /**
@@ -39,8 +57,9 @@ public class ExcelBuilder {
      * @param data 数据
      */
     private static void render(Sheet sheet,List<ExcelMapper> mappers,Map<String,Object> data){
+        MapperVisitor valueSetter= ValueSetterVisitor.create(sheet,data);
         for(ExcelMapper mapper : mappers){
-            mapper.map(sheet,data);
+            mapper.accept(valueSetter);
         }
     }
 

@@ -1,15 +1,10 @@
 package com.loatr.excel.mapper;
 
-import com.loatr.excel.ExcelTools;
-import com.loatr.excel.ValueExtractor;
 import com.loatr.excel.format.SimpleFormatter;
 import com.loatr.excel.format.ValueFormatter;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Sheet;
+import com.loatr.excel.visitor.MapperVisitor;
 
-import java.util.Map;
-
-public class NestMapper implements ExcelMapper{
+public class NestMapper extends ExcelMapper{
 
     private int row;
     private int col;
@@ -18,23 +13,11 @@ public class NestMapper implements ExcelMapper{
     private ValueFormatter formatter = new SimpleFormatter();
 
     @Override
-    public void map(Sheet sheet, Map<String, Object> dataMap) {
-        Object value = ValueExtractor.extract(express, dataMap);
-        if(!value.getClass().isAssignableFrom(Iterable.class)){
-            throw new RuntimeException("无法对一个非迭代对象取值");
-        }else{
-            Iterable<?> iterable = (Iterable)value;
-            int j = 0;
-            for(Object v : iterable){
-                for(int i = 0;i<exMap.length;i++){
-                    Object property = ValueExtractor.getProperty(value, exMap[i]);
-                    Cell cell = ExcelTools.getCell(sheet, row + j, col+ i);
-                    cell.setCellValue(formatter.format(property));
-                }
-                j++;
-            }
-        }
+    public <T> T accept(MapperVisitor<T> v) {
+        return v.forNest(this);
     }
+
+
 
     public int getRow() {
         return row;
@@ -66,5 +49,13 @@ public class NestMapper implements ExcelMapper{
 
     public void setExpress(String express) {
         this.express = express;
+    }
+
+    public ValueFormatter getFormatter() {
+        return formatter;
+    }
+
+    public void setFormatter(ValueFormatter formatter) {
+        this.formatter = formatter;
     }
 }

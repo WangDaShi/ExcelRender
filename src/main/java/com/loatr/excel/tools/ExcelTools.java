@@ -1,4 +1,4 @@
-package com.loatr.excel;
+package com.loatr.excel.tools;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;

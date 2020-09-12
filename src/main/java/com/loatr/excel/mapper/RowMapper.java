@@ -1,15 +1,10 @@
 package com.loatr.excel.mapper;
 
-import com.loatr.excel.ExcelTools;
-import com.loatr.excel.ValueExtractor;
 import com.loatr.excel.format.SimpleFormatter;
 import com.loatr.excel.format.ValueFormatter;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Sheet;
+import com.loatr.excel.visitor.MapperVisitor;
 
-import java.util.Map;
-
-public class RowMapper implements ExcelMapper{
+public class RowMapper extends ExcelMapper{
 
     private int row;
     private int col;
@@ -22,14 +17,10 @@ public class RowMapper implements ExcelMapper{
     }
 
     @Override
-    public void map(Sheet sheet, Map<String, Object> dataMap) {
-        Object value = ValueExtractor.extract(express, dataMap);
-        for(int i = 0;i<exMap.length;i++){
-            Object property = ValueExtractor.getProperty(value, exMap[i]);
-            Cell cell = ExcelTools.getCell(sheet, row, col + i);
-            cell.setCellValue(formatter.format(property));
-        }
+    public <T> T accept(MapperVisitor<T> v) {
+        return v.forRow(this);
     }
+
 
     public int getRow() {
         return row;
@@ -61,5 +52,13 @@ public class RowMapper implements ExcelMapper{
 
     public void setExpress(String express) {
         this.express = express;
+    }
+
+    public ValueFormatter getFormatter() {
+        return formatter;
+    }
+
+    public void setFormatter(ValueFormatter formatter) {
+        this.formatter = formatter;
     }
 }
