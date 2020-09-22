@@ -9,6 +9,11 @@ repositories {
     mavenCentral()
 }
 
+task srcZip(type: Zip){
+    classifier('src')
+    from project.sourceSets.main.java.srcDirs
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.11.2'

@@ -11,7 +11,7 @@ public class JsonTools {
         nonNull(n,"属性" + keyword.value() + "不存在");
         int a = n.asInt();
         if(a < 0){
-            throw new IllegalArgumentException("row 不能小于0");
+            throw new JsonParseException("row 不能小于0，node:" + node.toString());
         }else{
             return a;
         }
@@ -36,7 +36,7 @@ public class JsonTools {
 
     public static void nonNull(JsonNode node,String message){
         if(node.isNull()){
-            throw new JsonParseException(message);
+            throw new JsonParseException(message + ",node:" + node.toString());
         }
     }
 }

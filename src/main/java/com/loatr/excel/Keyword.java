@@ -1,5 +1,8 @@
 package com.loatr.excel;
 
+/**
+ * json配置文件中可以出现的关键字
+ */
 public enum Keyword {
 
     ROW("row"),
@@ -14,7 +17,7 @@ public enum Keyword {
 
     private String value;
 
-    private Keyword(String value){
+    Keyword(String value){
         this.value = value;
     }
 

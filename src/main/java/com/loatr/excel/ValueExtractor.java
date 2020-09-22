@@ -9,10 +9,10 @@ import java.util.Map;
 
 /**
  * 根据赋值表达式从数据集合中提取出对应的值。
- * 表达式支持四种语法：
- * a.b : 从bean对象a中获取属性b的值
- * a.method(): 调用对象a的method()方法并返回返回值
- * 结合律: 以上语法可以相互组合(例： a.b.c.m1())
+ * 表达式支持三种语法：
+ * (1) a.b : 从bean对象a中获取属性b的值
+ * (2) a.method(): 调用对象a的method()方法并返回返回值
+ * (3) 结合律: 以上语法可以相互组合(例： a.b.c.m1())
  */
 public class ValueExtractor {
 
@@ -36,7 +36,7 @@ public class ValueExtractor {
             return descriptor.getReadMethod().invoke(value);
         } catch (IllegalAccessException | InvocationTargetException  e) {
             e.printStackTrace();
-            throw new RuntimeException("属性不存在");
+            throw new RuntimeException("属性不存在",e.getCause());
         }
     }
 
@@ -46,7 +46,7 @@ public class ValueExtractor {
             return method.invoke(value);
         } catch (IllegalAccessException | InvocationTargetException  e) {
             e.printStackTrace();
-            throw new RuntimeException("属性不存在");
+            throw new RuntimeException("属性不存在",e.getCause());
         }
     }
 

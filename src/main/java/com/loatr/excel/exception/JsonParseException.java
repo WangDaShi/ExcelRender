@@ -1,7 +1,7 @@
 package com.loatr.excel.exception;
 
 /**
- * json解析异常，先写出来，暂时不使用
+ * json解析异常
  */
 public class JsonParseException extends RuntimeException{
 

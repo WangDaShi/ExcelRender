@@ -30,7 +30,7 @@ public class ExcelBuilder {
      */
     public static void create(String path, File json, File template, Object ... data) throws IOException {
         assertArgument(path,json,template,data);
-        JsonConfig config = parseJson(json);
+        JsonConfig config = objectMapper.readValue(json,JsonConfig.class);
         Map<String,Object> dataMap = extraData(config.getData(),data);
         List<ExcelMapper> mappers = parseMapper(config);
         int sheetNum = config.getSheet();
@@ -61,6 +61,7 @@ public class ExcelBuilder {
         for(ExcelMapper mapper : mappers){
             mapper.accept(valueSetter);
         }
+        // TODO 后续可以考虑添加style的visitor,单元格merge的visitor
     }
 
     /**
@@ -86,15 +87,15 @@ public class ExcelBuilder {
      * @return bean名称与对象的映射
      */
     private static Map<String, Object> extraData(String[] dataNames, Object[] data) {
-        Objects.requireNonNull(data);
-        Objects.requireNonNull(dataNames);
+        Objects.requireNonNull(data,"传入数据不能为null");
+        Objects.requireNonNull(dataNames,"json的data属性不能填空");
         if(dataNames.length != data.length){
-            throw new IllegalArgumentException("数据配置有误");
+            throw new IllegalArgumentException("json中data属性与传入参数数量不一致");
         }
         Map<String,Object> map = new HashMap<>();
         for(int i =0;i<dataNames.length;i++){
             if(map.containsKey(dataNames[i])){
-                throw new IllegalArgumentException("数据名重复");
+                throw new IllegalArgumentException("json中data属性名不能重复");
             }
             map.put(dataNames[i],data[i]);
         }

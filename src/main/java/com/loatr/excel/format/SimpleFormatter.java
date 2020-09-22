@@ -7,6 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * 一个最简单的格式化实现
+ */
 public class SimpleFormatter implements ValueFormatter{
 
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -36,7 +39,7 @@ public class SimpleFormatter implements ValueFormatter{
                 || colType.equals(String.class)) {
             return value.toString();
         } else if (java.util.Date.class.isAssignableFrom(colType)) {
-            return ((Date)value).toString();
+            return value.toString();
         } else if (java.sql.Time.class.isAssignableFrom(colType)) {
             return value.toString();
         } else if (colType.equals(LocalDate.class)) {

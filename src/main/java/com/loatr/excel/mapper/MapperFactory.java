@@ -21,7 +21,7 @@ public class MapperFactory {
      * @return
      */
     public static ExcelMapper create(JsonNode node){
-        // dispatch
+        // dispatch to the right mapper
         if(node.has(Keyword.COLUMN.value())){
             return parseCellMapper(node);
         }else if(node.has(Keyword.START_COLUMN.value())){
@@ -30,12 +30,12 @@ public class MapperFactory {
             }else if(node.has(Keyword.MAPPER.value())){
                 return parseRowMapper(node);
             }else{
-                throw new RuntimeException("格式错误，无法解析");
+                throw new JsonParseException("格式错误，node无法解析:" + node.toPrettyString());
             }
         }else if(node.has(Keyword.BLANK_ROW.value())) {
             return parseBlankMapper(node);
         }else {
-            throw new RuntimeException("格式错误，无法解析");
+            throw new JsonParseException("格式错误，node无法解析:" + node.toPrettyString());
         }
     }
 

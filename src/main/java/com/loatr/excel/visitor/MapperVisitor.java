@@ -3,8 +3,8 @@ package com.loatr.excel.visitor;
 import com.loatr.excel.mapper.*;
 
 /**
- * ExcelMapper对应的versitor接口
- * @param <T>
+ * ExcelMapper对应的visitor接口
+ * @param <T> 返回值
  */
 public interface MapperVisitor<T> {
 
