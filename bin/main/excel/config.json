@@ -1,0 +1,47 @@
+{
+    "sheet": 1,
+    "data": ["list","info"],
+    "mappers":[
+        {
+            "data": "info.userName",
+            "row": 1,
+            "column": 2 
+        },
+        {
+            "data": "list.size()",
+            "row": 1,
+            "column": 2 
+        },
+        {
+            "message": "userName",
+            "row": 1,
+            "column": 2 
+        },
+        {
+            "data": "list",
+            "startRow": 3,
+            "startColumn": 1,
+            "mapper":["aaa","bbb","ccc"]
+        },
+        {
+            "data": "list",
+            "startRow": 3,
+            "startColumn": 1,
+            "nestMapper":["aaa","bbb","ccc"]
+        },
+        {
+            "blankRow": 10
+        },
+        {
+            "data": "list",
+            "startRow": 3,
+            "startColumn": 1,
+            "mapper":{
+                "1": "name",
+                "2": "passId",
+                "3": "transactionId",
+                "4": "insertTime"
+            }
+        }
+    ]
+}
